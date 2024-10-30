@@ -89,7 +89,7 @@ def check_subscription(request):
     
     if subscription:
         now = timezone.now()
-        if subscription.start_date <= now <= subscription.end_date:
+        if now <= subscription.end_date:
             return Response({
                 'valid': True,
                 'start_time': subscription.start_date,
