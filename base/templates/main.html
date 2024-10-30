@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -59,3 +60,66 @@
     </div>
 </body>
 </html>
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Main Page</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <script type="text/javascript">
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        const csrftoken = getCookie('csrftoken');
+
+        function generateSerialKey() {
+            fetch('/generate-serial/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById("generated-serial").innerText = "Generated Serial Key: " + data.serial_key;
+            })
+            .catch(error => {
+                console.error("Error generating serial key:", error);
+            });
+        }
+
+        function redirectToUpdatePage() {
+            window.location.href = "/create-subscription/";
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>Subscription Management</h2>
+        <button class="button" onclick="generateSerialKey()">Generate Serial Key</button>
+        <button class="button" onclick="redirectToUpdatePage()">Create Subscription</button>
+        <div id="generated-serial">No serial key generated yet.</div>
+    </div>
+</body>
+</html>
+>>>>>>> master
