@@ -11,7 +11,9 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
+from django.views.decorators.csrf import csrf_exempt
 
+@csrf_exempt
 def generate_serial_key(request):
     if request.method == "POST":
         serial_key = str(uuid.uuid4())
