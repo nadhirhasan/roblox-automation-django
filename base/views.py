@@ -102,7 +102,7 @@ def check_subscription(request):
 
         # Determine the last_checkin time based on program_stopped
         if program_stopped:
-            last_checkin = now - timezone.timedelta(minutes=5)
+            last_checkin = now - timezone.timedelta(minutes=10)
         else:
             last_checkin = now
 
@@ -114,6 +114,7 @@ def check_subscription(request):
         current_time_utc = now.isoformat() + "Z"  # Appending Z to indicate UTC
         last_checkin_utc = last_checkin_original.isoformat() + "Z" if last_checkin_original else None
 
+        hsvVals = {'hmin': 15, 'smin': 202, 'vmin': 214, 'hmax': 23, 'smax': 255, 'vmax': 255}
         # Check if the subscription is still valid
         if now <= subscription.end_date:
             return Response({
@@ -122,7 +123,8 @@ def check_subscription(request):
                 'end_time': subscription.end_date.isoformat() + "Z",
                 'last_checkin': last_checkin_utc,
                 'current_time': current_time_utc,
-                'time_left': (subscription.end_date - now).total_seconds()
+                'time_left': (subscription.end_date - now).total_seconds(),
+                'hsv': hsvVals
             }, status=status.HTTP_200_OK)
 
         return Response({'valid': False, 'message': 'Subscription expired'}, status=status.HTTP_200_OK)
